@@ -1,6 +1,5 @@
 # go.db.restapi
 
-[![DepShield Badge](https://depshield.sonatype.org/badges/caiocampos/go.db.restapi/depshield.svg)](https://depshield.github.io)
 [![License](https://img.shields.io/github/license/caiocampos/go.db.restapi.svg)](LICENSE)
 
 Servidor go simples com conexão ao MongoDB 
