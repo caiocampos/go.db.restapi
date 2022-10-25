@@ -3,7 +3,7 @@ module go.db.restapi
 go 1.17
 
 require (
-	github.com/BurntSushi/toml v1.2.0
+	github.com/BurntSushi/toml v1.2.1
 	github.com/gorilla/mux v1.8.0
 	gopkg.in/mgo.v2 v2.0.0-20180705113604-9856a29383ce
 )
