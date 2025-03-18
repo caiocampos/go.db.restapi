@@ -1,6 +1,6 @@
 module go.db.restapi
 
-go 1.17
+go 1.22.0
 
 require (
 	github.com/BurntSushi/toml v1.5.0
