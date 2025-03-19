@@ -1,9 +1,9 @@
 package main
 
 import (
-	"go.db.restapi/controller"
+	"go.db.restapi/server"
 )
 
 func main() {
-	controller.Init()
+	server.Init()
 }

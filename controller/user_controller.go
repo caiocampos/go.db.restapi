@@ -1,101 +1,92 @@
 package controller
 
 import (
-	"encoding/json"
-	"net/http"
-
-	"github.com/gorilla/mux"
-	"gopkg.in/mgo.v2/bson"
+	"github.com/gofiber/fiber/v2"
 
 	"go.db.restapi/model"
 	serv "go.db.restapi/service"
 )
 
-type userController struct{ serv *serv.UserService }
+type UserController struct{ serv *serv.UserService }
 
-func (u *userController) init(router *mux.Router) {
+func (u *UserController) Init(app *fiber.App) {
 	if u.serv == nil {
 		u.serv = &serv.UserService{}
-		router.HandleFunc("/user", u.findAll).Methods("GET")
-		router.HandleFunc("/user/id/{id}", u.findByID).Methods("GET")
-		router.HandleFunc("/user/name/{name}", u.findByName).Methods("GET")
-		router.HandleFunc("/user", u.insert).Methods("POST")
-		router.HandleFunc("/user", u.delete).Methods("DELETE")
-		router.HandleFunc("/user", u.update).Methods("PUT")
+		app.Get("/user", u.findAll)
+		app.Get("/user/id/{id}", u.findByID)
+		app.Get("/user/name/{name}", u.findByName)
+		app.Post("/user", u.insert)
+		app.Delete("/user", u.delete)
+		app.Delete("/user/id/{id}", u.deleteByID)
+		app.Put("/user", u.update)
 	}
 }
 
-func (u *userController) findAll(w http.ResponseWriter, r *http.Request) {
-	users, err := u.serv.FindAll()
+func (u *UserController) findAll(c *fiber.Ctx) error {
+	users, err := u.serv.FindAll(c.Context())
 	if err != nil {
-		respondWithJSON(w, http.StatusInternalServerError, err.Error())
-		return
+		return c.Status(400).SendString(err.Error())
 	}
 	if users == nil {
 		users = []model.User{}
 	}
-	respondWithJSON(w, http.StatusOK, users)
+	return c.Status(fiber.StatusOK).JSON(users)
 }
 
-func (u *userController) findByName(w http.ResponseWriter, r *http.Request) {
-	params := mux.Vars(r)
-	user, err := u.serv.FindByName(params["name"])
+func (u *UserController) findByName(c *fiber.Ctx) error {
+	user, err := u.serv.FindByName(c.Context(), c.Params("name"))
 	if err != nil {
-		respondWithJSON(w, http.StatusBadRequest, "Name not found")
-		return
+		return c.Status(400).SendString("Name not found")
 	}
-	respondWithJSON(w, http.StatusOK, user)
+	return c.Status(fiber.StatusOK).JSON(user)
 }
 
-func (u *userController) findByID(w http.ResponseWriter, r *http.Request) {
-	params := mux.Vars(r)
-	user, err := u.serv.FindByID(params["id"])
+func (u *UserController) findByID(c *fiber.Ctx) error {
+	user, err := u.serv.FindByID(c.Context(), c.Params("id"))
 	if err != nil {
-		respondWithJSON(w, http.StatusBadRequest, "ID not found")
-		return
+		return c.Status(400).SendString("ID not found")
 	}
-	respondWithJSON(w, http.StatusOK, user)
+	return c.Status(fiber.StatusOK).JSON(user)
 }
 
-func (u *userController) insert(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
-	var user model.User
-	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
-		respondWithJSON(w, http.StatusBadRequest, "Invalid request")
-		return
+func (u *UserController) insert(c *fiber.Ctx) error {
+	user := new(model.User)
+	if err := c.BodyParser(user); err != nil {
+		return c.Status(400).SendString("Invalid request")
 	}
-	user.ID = bson.NewObjectId()
-	if err := u.serv.Insert(user); err != nil {
-		respondWithJSON(w, http.StatusInternalServerError, err.Error())
-		return
+	userResult, err := u.serv.Insert(c.Context(), *user)
+	if err != nil {
+		return c.Status(400).SendString(err.Error())
 	}
-	respondWithJSON(w, http.StatusCreated, user)
+	return c.Status(fiber.StatusCreated).JSON(userResult)
 }
 
-func (u *userController) delete(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
-	var user model.User
-	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
-		respondWithJSON(w, http.StatusBadRequest, "Invalid request")
-		return
+func (u *UserController) delete(c *fiber.Ctx) error {
+	user := new(model.User)
+	if err := c.BodyParser(user); err != nil {
+		return c.Status(400).SendString("Invalid request")
 	}
-	if err := u.serv.Delete(user); err != nil {
-		respondWithJSON(w, http.StatusInternalServerError, err.Error())
-		return
+	if err := u.serv.Delete(c.Context(), *user); err != nil {
+		return c.Status(400).SendString(err.Error())
 	}
-	respondWithJSON(w, http.StatusOK, "OK")
+	return c.SendStatus(fiber.StatusNoContent)
 }
 
-func (u *userController) update(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
-	var user model.User
-	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
-		respondWithJSON(w, http.StatusBadRequest, "Invalid request")
-		return
+func (u *UserController) deleteByID(c *fiber.Ctx) error {
+	err := u.serv.DeleteByID(c.Context(), c.Params("id"))
+	if err != nil {
+		return c.Status(400).SendString("ID not found")
 	}
-	if err := u.serv.Update(user); err != nil {
-		respondWithJSON(w, http.StatusInternalServerError, err.Error())
-		return
+	return c.SendStatus(fiber.StatusNoContent)
+}
+
+func (u *UserController) update(c *fiber.Ctx) error {
+	user := new(model.User)
+	if err := c.BodyParser(user); err != nil {
+		return c.Status(400).SendString("Invalid request")
 	}
-	respondWithJSON(w, http.StatusOK, "OK")
+	if err := u.serv.Update(c.Context(), *user); err != nil {
+		return c.Status(400).SendString(err.Error())
+	}
+	return c.SendStatus(fiber.StatusOK)
 }
