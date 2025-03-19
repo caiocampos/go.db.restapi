@@ -1,6 +1,8 @@
 package service
 
 import (
+	"context"
+
 	"go.db.restapi/model"
 	repo "go.db.restapi/repository"
 )
@@ -14,38 +16,44 @@ func (u *UserService) init() {
 	}
 }
 
+func (u *UserService) repository() *repo.UserRepository {
+	if u.repo == nil {
+		u.init()
+	}
+	return u.repo
+}
+
 // FindAll method returns all users in database
-func (u *UserService) FindAll() ([]model.User, error) {
-	u.init()
-	return u.repo.FindAll()
+func (u *UserService) FindAll(ctx context.Context) ([]model.User, error) {
+	return u.repository().FindAll(ctx)
 }
 
 // FindByName method returns a user in database
-func (u *UserService) FindByName(name string) (model.User, error) {
-	u.init()
-	return u.repo.FindByName(name)
+func (u *UserService) FindByName(ctx context.Context, name string) (model.User, error) {
+	return u.repository().FindByName(ctx, name)
 }
 
 // FindByID method returns a user in database
-func (u *UserService) FindByID(id string) (model.User, error) {
-	u.init()
-	return u.repo.FindByID(id)
+func (u *UserService) FindByID(ctx context.Context, id string) (model.User, error) {
+	return u.repository().FindByID(ctx, id)
 }
 
 // Insert method inserts a user in database
-func (u *UserService) Insert(user model.User) error {
-	u.init()
-	return u.repo.Insert(user)
+func (u *UserService) Insert(ctx context.Context, user model.User) (model.User, error) {
+	return u.repository().Insert(ctx, user)
 }
 
 // Delete method deletes a user in database
-func (u *UserService) Delete(user model.User) error {
-	u.init()
-	return u.repo.Delete(user)
+func (u *UserService) Delete(ctx context.Context, user model.User) error {
+	return u.repository().Delete(ctx, user)
+}
+
+// Delete method deletes a user in database
+func (u *UserService) DeleteByID(ctx context.Context, id string) error {
+	return u.repository().DeleteByID(ctx, id)
 }
 
 // Update method updates a user in database
-func (u *UserService) Update(user model.User) error {
-	u.init()
-	return u.repo.Update(user)
+func (u *UserService) Update(ctx context.Context, user model.User) error {
+	return u.repository().Update(ctx, user)
 }
