@@ -1,6 +1,5 @@
 # go.db.restapi
 
-[![GuardRails Badge](https://badges.guardrails.io/caiocampos/go.db.restapi.svg)](https://www.guardrails.io/)
 [![License](https://img.shields.io/github/license/caiocampos/go.db.restapi.svg)](LICENSE)
 
 Servidor go simples com conexão ao MongoDB 
