@@ -6,10 +6,10 @@ toolchain go1.23.7
 
 require (
 	github.com/BurntSushi/toml v1.5.0
+	github.com/bytedance/sonic v1.13.2
 	github.com/gofiber/fiber/v2 v2.52.6
-	go.mongodb.org/mongo-driver v1.17.3
-	github.com/bytedance/sonic v1.13.1
 	github.com/matzefriedrich/parsley v1.0.11
+	go.mongodb.org/mongo-driver v1.17.3
 )
 
 require (
