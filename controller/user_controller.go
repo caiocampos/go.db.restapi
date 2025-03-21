@@ -7,18 +7,27 @@ import (
 	serv "go.db.restapi/service"
 )
 
-type UserController struct{ serv *serv.UserService }
+type UserController struct {
+	serv    serv.UserService
+	started bool
+}
+
+func NewUserController() Controller {
+	serv := serv.UserService{}
+	return &UserController{serv, false}
+}
 
 func (u *UserController) Init(app *fiber.App) {
-	if u.serv == nil {
-		u.serv = &serv.UserService{}
-		app.Get("/user", u.findAll)
-		app.Get("/user/id/{id}", u.findByID)
-		app.Get("/user/name/{name}", u.findByName)
-		app.Post("/user", u.insert)
-		app.Delete("/user", u.delete)
-		app.Delete("/user/id/{id}", u.deleteByID)
-		app.Put("/user", u.update)
+	if u.started {
+		users := app.Group("/users")
+		users.Get("/", u.findAll)
+		users.Get("/id/:id", u.findByID)
+		users.Get("/name/:name", u.findByName)
+		users.Post("/", u.insert)
+		users.Delete("/", u.delete)
+		users.Delete("/id/:id", u.deleteByID)
+		users.Put("/", u.update)
+		u.started = true
 	}
 }
 

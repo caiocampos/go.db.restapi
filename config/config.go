@@ -1,18 +1,17 @@
 package config
 
 import (
-	"log"
-
 	"github.com/BurntSushi/toml"
 )
 
 type config struct {
 	App app
-	DB  database `toml:"database"`
+	DB  database
 }
 
 type app struct {
-	Port int
+	Port          int
+	JsonProcessor string `toml:"json_processor"`
 }
 
 type database struct {
@@ -24,11 +23,13 @@ type database struct {
 var TOMLConfig *config
 
 // ReadTOML method reads and parses the TOML configuration file
-func ReadTOML() {
+func ReadTOML() error {
 	if TOMLConfig == nil {
 		TOMLConfig = &config{}
-		if _, err := toml.DecodeFile("config.toml", &TOMLConfig); err != nil {
-			log.Fatal(err)
+		_, err := toml.DecodeFile("config.toml", &TOMLConfig)
+		if err != nil {
+			return err
 		}
 	}
+	return nil
 }

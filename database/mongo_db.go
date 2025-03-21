@@ -36,6 +36,6 @@ func MongoConnect() error {
 			Db:     db,
 		}
 	}
-	
+
 	return nil
 }

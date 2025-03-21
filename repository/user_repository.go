@@ -16,11 +16,11 @@ import (
 // UserRepository defines the repository for the User entity
 type UserRepository struct {
 	collectionName string
-	started bool
+	started        bool
 }
 
 func (u *UserRepository) connect() {
-	if (!u.started) {
+	if !u.started {
 		if err := database.MongoConnect(); err != nil {
 			log.Fatal(err)
 		}
@@ -30,7 +30,7 @@ func (u *UserRepository) connect() {
 }
 
 func (u *UserRepository) collection() *mongo.Collection {
-	if (!u.started) {
+	if !u.started {
 		u.connect()
 	}
 	return database.MongoDB.Db.Collection(u.collectionName)
@@ -70,7 +70,7 @@ func (u *UserRepository) FindByID(ctx context.Context, id string) (model.User, e
 // Insert method inserts a user in database
 func (u *UserRepository) Insert(ctx context.Context, user model.User) (model.User, error) {
 	user.ID = primitive.NilObjectID
-	collection :=  u.collection()
+	collection := u.collection()
 	result, err := collection.InsertOne(ctx, user)
 	if err != nil {
 		return user, err
@@ -89,7 +89,7 @@ func (u *UserRepository) DeleteByObjectID(ctx context.Context, id primitive.Obje
 	}
 	// the employee might not exist
 	if result.DeletedCount < 1 {
-		return  errors.New("user not found")
+		return errors.New("user not found")
 	}
 	return nil
 }
