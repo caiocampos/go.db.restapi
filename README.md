@@ -14,11 +14,11 @@ Antes de executar modifique o arquivo config.toml para apontar para o MongoDB in
 
 Após instalar o Go e configurar o arquivo config.toml compile o código, utilize o seguinte comando para isso:
 
-> go build
+> go build cmd/main.go
 
 E depois, para executar:
 
-> ./go.db.restapi
+> ./main
 
 Para configurar o MongoDB localmente siga o tutorial:
 

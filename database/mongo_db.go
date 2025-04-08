@@ -9,33 +9,49 @@ import (
 	"go.db.restapi/config"
 )
 
-// MongoInstance contains the Mongo client and database objects
+type MongoDataBase struct {
+	mongo  *MongoInstance
+	config config.ConfigLoader
+}
+
+// mongoInstance contains the Mongo client and database objects
 type MongoInstance struct {
-	Client *mongo.Client
+	client *mongo.Client
 	Db     *mongo.Database
 }
 
-var MongoDB *MongoInstance
+func NewMongoDataBase(config config.ConfigLoader) Database[MongoInstance] {
+	return &MongoDataBase{
+		config: config,
+	}
+}
 
 // connect function establish a connection to database
-func MongoConnect() error {
-	if MongoDB == nil {
-		config.ReadTOML()
-		client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(config.TOMLConfig.DB.Server))
+func (m *MongoDataBase) Connect() error {
+	if m.mongo == nil {
+		m.config.Load()
+		config := m.config.Get()
+		client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(config.DB.Server))
 		if err != nil {
 			return err
 		}
-		defer func() {
-			if err := client.Disconnect(context.TODO()); err != nil {
-				panic(err)
-			}
-		}()
-		db := client.Database(config.TOMLConfig.DB.Database)
-		MongoDB = &MongoInstance{
-			Client: client,
-			Db:     db,
+		db := client.Database(config.DB.Database)
+		m.mongo = &MongoInstance{
+			client,
+			db,
 		}
 	}
-
 	return nil
+}
+
+// connect function establish a connection to database
+func (m *MongoDataBase) Disconnect() error {
+	result := m.mongo.client.Disconnect(context.TODO())
+	m.mongo = nil
+	return result
+}
+
+func (m *MongoDataBase) Get() *MongoInstance {
+	m.Connect()
+	return m.mongo
 }

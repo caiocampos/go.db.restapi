@@ -8,17 +8,16 @@ import (
 )
 
 type UserController struct {
-	serv    serv.UserService
+	serv    serv.UserService[model.User]
 	started bool
 }
 
-func NewUserController() Controller {
-	serv := serv.UserService{}
+func NewUserController(serv serv.UserService[model.User]) Controller {
 	return &UserController{serv, false}
 }
 
 func (u *UserController) Init(app *fiber.App) {
-	if u.started {
+	if !u.started {
 		users := app.Group("/users")
 		users.Get("/", u.findAll)
 		users.Get("/id/:id", u.findByID)
@@ -59,11 +58,11 @@ func (u *UserController) findByID(c *fiber.Ctx) error {
 }
 
 func (u *UserController) insert(c *fiber.Ctx) error {
-	user := new(model.User)
+	user := model.User{}
 	if err := c.BodyParser(user); err != nil {
 		return c.Status(400).SendString("Invalid request")
 	}
-	userResult, err := u.serv.Insert(c.Context(), *user)
+	userResult, err := u.serv.Insert(c.Context(), user)
 	if err != nil {
 		return c.Status(400).SendString(err.Error())
 	}
@@ -71,11 +70,11 @@ func (u *UserController) insert(c *fiber.Ctx) error {
 }
 
 func (u *UserController) delete(c *fiber.Ctx) error {
-	user := new(model.User)
+	user := model.User{}
 	if err := c.BodyParser(user); err != nil {
 		return c.Status(400).SendString("Invalid request")
 	}
-	if err := u.serv.Delete(c.Context(), *user); err != nil {
+	if err := u.serv.Delete(c.Context(), user); err != nil {
 		return c.Status(400).SendString(err.Error())
 	}
 	return c.SendStatus(fiber.StatusNoContent)
@@ -90,11 +89,11 @@ func (u *UserController) deleteByID(c *fiber.Ctx) error {
 }
 
 func (u *UserController) update(c *fiber.Ctx) error {
-	user := new(model.User)
+	user := model.User{}
 	if err := c.BodyParser(user); err != nil {
 		return c.Status(400).SendString("Invalid request")
 	}
-	if err := u.serv.Update(c.Context(), *user); err != nil {
+	if err := u.serv.Update(c.Context(), user); err != nil {
 		return c.Status(400).SendString(err.Error())
 	}
 	return c.SendStatus(fiber.StatusOK)

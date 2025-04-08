@@ -1,44 +1,37 @@
 package server
 
 import (
-	"context"
 	"log"
 	"strconv"
 	"strings"
 
 	"github.com/bytedance/sonic"
 	"github.com/gofiber/fiber/v2"
-	"github.com/matzefriedrich/parsley/pkg/bootstrap"
 
 	"go.db.restapi/config"
 	ctrl "go.db.restapi/controller"
 )
 
 type FiberServer struct {
-	app     *fiber.App
-	user    *ctrl.UserController
-	started bool
+	app         *fiber.App
+	started     bool
+	config      config.ConfigLoader
+	controllers []ctrl.Controller
 }
 
-var _ bootstrap.Application = &FiberServer{}
-
-func NewFiberServer() Server {
-	return &FiberServer{}
-}
-
-func NewApp() bootstrap.Application {
-	return &FiberServer{}
+func NewFiberServer(config config.ConfigLoader, controllers []ctrl.Controller) Server {
+	return &FiberServer{config: config, controllers: controllers, started: false}
 }
 
 // Init method boots the end-points for the server
 func (fs *FiberServer) Init() error {
-	if fs.started {
-		err := config.ReadTOML()
+	if !fs.started {
+		err := fs.config.Load()
 		if err != nil {
 			log.Fatal(err)
 			return err
 		}
-		if strings.ToLower(config.TOMLConfig.App.JsonProcessor) == "sonic" {
+		if strings.ToLower(fs.config.Get().App.JsonProcessor) == "sonic" {
 			fs.app = fiber.New(fiber.Config{
 				JSONEncoder: sonic.Marshal,
 				JSONDecoder: sonic.Unmarshal,
@@ -46,10 +39,10 @@ func (fs *FiberServer) Init() error {
 		} else {
 			fs.app = fiber.New()
 		}
-		fs.user = &ctrl.UserController{}
-
-		fs.user.Init(fs.app)
-		port := strconv.Itoa(config.TOMLConfig.App.Port)
+		for _, controller := range fs.controllers {
+			controller.Init(fs.app)
+		}
+		port := strconv.Itoa(fs.config.Get().App.Port)
 		err = fs.app.Listen(":" + port)
 		if err != nil {
 			log.Fatal(err)
@@ -58,9 +51,4 @@ func (fs *FiberServer) Init() error {
 		fs.started = true
 	}
 	return nil
-}
-
-// Run The entrypoint for the Parsley application.
-func (fs *FiberServer) Run(_ context.Context) error {
-	return fs.Init()
 }

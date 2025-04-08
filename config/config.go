@@ -1,12 +1,13 @@
 package config
 
-import (
-	"github.com/BurntSushi/toml"
-)
+type ConfigLoader interface {
+	Load() error
+	Get() *Config
+}
 
-type config struct {
+type Config struct {
 	App app
-	DB  database
+	DB  database `toml:"database"`
 }
 
 type app struct {
@@ -17,19 +18,4 @@ type app struct {
 type database struct {
 	Server   string
 	Database string
-}
-
-// TOMLConfig represents the toml configuration file
-var TOMLConfig *config
-
-// ReadTOML method reads and parses the TOML configuration file
-func ReadTOML() error {
-	if TOMLConfig == nil {
-		TOMLConfig = &config{}
-		_, err := toml.DecodeFile("config.toml", &TOMLConfig)
-		if err != nil {
-			return err
-		}
-	}
-	return nil
 }
