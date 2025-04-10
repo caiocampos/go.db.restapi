@@ -26,11 +26,6 @@ func NewFiberServer(config config.ConfigLoader, controllers []ctrl.Controller) S
 // Init method boots the end-points for the server
 func (fs *FiberServer) Init() error {
 	if !fs.started {
-		err := fs.config.Load()
-		if err != nil {
-			log.Fatal(err)
-			return err
-		}
 		if strings.ToLower(fs.config.Get().App.JsonProcessor) == "sonic" {
 			fs.app = fiber.New(fiber.Config{
 				JSONEncoder: sonic.Marshal,
@@ -43,9 +38,8 @@ func (fs *FiberServer) Init() error {
 			controller.Init(fs.app)
 		}
 		port := strconv.Itoa(fs.config.Get().App.Port)
-		err = fs.app.Listen(":" + port)
-		if err != nil {
-			log.Fatal(err)
+		if err := fs.app.Listen(":" + port); err != nil {
+			log.Println(err)
 			return err
 		}
 		fs.started = true

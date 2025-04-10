@@ -37,6 +37,12 @@ func (u *UserController) findAll(c *fiber.Ctx) error {
 	}
 	if users == nil {
 		users = []model.User{}
+	} else {
+		parsedUsers := []model.User{}
+		for _, user := range users {
+			parsedUsers = append(parsedUsers, user.GetWithoutPass())
+		}
+		users = parsedUsers
 	}
 	return c.Status(fiber.StatusOK).JSON(users)
 }
@@ -46,7 +52,7 @@ func (u *UserController) findByName(c *fiber.Ctx) error {
 	if err != nil {
 		return c.Status(400).SendString("Name not found")
 	}
-	return c.Status(fiber.StatusOK).JSON(user)
+	return c.Status(fiber.StatusOK).JSON(user.GetWithoutPass())
 }
 
 func (u *UserController) findByID(c *fiber.Ctx) error {
@@ -54,7 +60,7 @@ func (u *UserController) findByID(c *fiber.Ctx) error {
 	if err != nil {
 		return c.Status(400).SendString("ID not found")
 	}
-	return c.Status(fiber.StatusOK).JSON(user)
+	return c.Status(fiber.StatusOK).JSON(user.GetWithoutPass())
 }
 
 func (u *UserController) insert(c *fiber.Ctx) error {
@@ -66,7 +72,7 @@ func (u *UserController) insert(c *fiber.Ctx) error {
 	if err != nil {
 		return c.Status(400).SendString(err.Error())
 	}
-	return c.Status(fiber.StatusCreated).JSON(userResult)
+	return c.Status(fiber.StatusCreated).JSON(userResult.GetWithoutPass())
 }
 
 func (u *UserController) delete(c *fiber.Ctx) error {

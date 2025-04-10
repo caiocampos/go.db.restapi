@@ -1,14 +1,16 @@
 module go.db.restapi
 
-go 1.23
+go 1.23.0
 
-toolchain go1.23.7
+toolchain go1.24.2
 
 require (
 	github.com/BurntSushi/toml v1.5.0
 	github.com/bytedance/sonic v1.13.2
 	github.com/gofiber/fiber/v2 v2.52.6
 	github.com/matzefriedrich/parsley v1.0.11
+	github.com/redis/rueidis v1.0.57
+	github.com/valkey-io/valkey-go v1.0.57
 	go.mongodb.org/mongo-driver v1.17.3
 )
 
@@ -35,7 +37,7 @@ require (
 	github.com/youmark/pkcs8 v0.0.0-20240726163527-a2c0da244d78 // indirect
 	golang.org/x/arch v0.0.0-20210923205945-b76863e36670 // indirect
 	golang.org/x/crypto v0.31.0 // indirect
-	golang.org/x/sync v0.10.0 // indirect
-	golang.org/x/sys v0.28.0 // indirect
-	golang.org/x/text v0.21.0 // indirect
+	golang.org/x/sync v0.12.0 // indirect
+	golang.org/x/sys v0.31.0 // indirect
+	golang.org/x/text v0.23.0 // indirect
 )

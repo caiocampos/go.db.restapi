@@ -53,6 +53,10 @@ func (u *UserMongoRepository) collection() *mongo.Collection {
 	return u.database.Get().Db.Collection(u.collectionName)
 }
 
+func (u *UserMongoRepository) GetDBType() string {
+	return "mongo"
+}
+
 // FindAll method returns all users in database
 func (u *UserMongoRepository) FindAll(ctx context.Context) ([]model.User, error) {
 	cursor, err := u.collection().Find(ctx, bson.M{})
@@ -60,7 +64,7 @@ func (u *UserMongoRepository) FindAll(ctx context.Context) ([]model.User, error)
 	if err != nil {
 		return nil, err
 	}
-	var users []model.User = make([]model.User, 0)
+	users := []model.User{}
 	if err := cursor.All(ctx, &users); err != nil {
 		return nil, err
 	}
@@ -69,7 +73,7 @@ func (u *UserMongoRepository) FindAll(ctx context.Context) ([]model.User, error)
 
 // FindByName method returns a user in database
 func (u *UserMongoRepository) FindByName(ctx context.Context, name string) (model.User, error) {
-	var user model.User
+	user := model.User{}
 	err := u.collection().FindOne(ctx, bson.M{"name": name}).Decode(&user)
 	defer u.disconnect()
 	return user, err
@@ -77,7 +81,7 @@ func (u *UserMongoRepository) FindByName(ctx context.Context, name string) (mode
 
 // FindByID method returns a user in database
 func (u *UserMongoRepository) FindByID(ctx context.Context, id string) (model.User, error) {
-	var user model.User
+	user := model.User{}
 	_id, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return user, err
@@ -102,21 +106,21 @@ func (u *UserMongoRepository) Insert(ctx context.Context, user model.User) (mode
 	return user, err
 }
 
-// Delete method deletes a user in database
+// deleteByObjectID method deletes a user from database
 func (u *UserMongoRepository) deleteByObjectID(ctx context.Context, id primitive.ObjectID) error {
 	result, err := u.collection().DeleteOne(ctx, bson.M{"_id": id})
 	defer u.disconnect()
 	if err != nil {
 		return err
 	}
-	// the employee might not exist
+	// the user might not exist
 	if result.DeletedCount < 1 {
 		return errors.New("user not found")
 	}
 	return nil
 }
 
-// Delete method deletes a user in database
+// DeleteByID method deletes a user in database
 func (u *UserMongoRepository) DeleteByID(ctx context.Context, id string) error {
 	_id, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
@@ -125,7 +129,7 @@ func (u *UserMongoRepository) DeleteByID(ctx context.Context, id string) error {
 	return u.deleteByObjectID(ctx, _id)
 }
 
-// Delete method deletes a user in database
+// Delete method deletes a user from database
 func (u *UserMongoRepository) Delete(ctx context.Context, user model.User) error {
 	return u.deleteByObjectID(ctx, user.ID)
 }

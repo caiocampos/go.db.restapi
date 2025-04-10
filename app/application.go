@@ -19,6 +19,5 @@ func NewApp(server server.Server) bootstrap.Application {
 
 // Run The entrypoint for the Parsley application.
 func (a *parsleyApplication) Run(_ context.Context) error {
-	a.server.Init()
-	return nil
+	return a.server.Init()
 }

@@ -1,6 +1,8 @@
 package config
 
 import (
+	"log"
+
 	"github.com/BurntSushi/toml"
 )
 
@@ -27,5 +29,8 @@ func (c *tomlConfigloader) Load() error {
 }
 
 func (c *tomlConfigloader) Get() *Config {
+	if err := c.Load(); err != nil {
+		log.Fatal(err)
+	}
 	return &c.config
 }

@@ -14,7 +14,7 @@ type MongoDataBase struct {
 	config config.ConfigLoader
 }
 
-// mongoInstance contains the Mongo client and database objects
+// MongoInstance contains the Mongo client and database objects
 type MongoInstance struct {
 	client *mongo.Client
 	Db     *mongo.Database
@@ -26,10 +26,9 @@ func NewMongoDataBase(config config.ConfigLoader) Database[MongoInstance] {
 	}
 }
 
-// connect function establish a connection to database
+// Connect function establish a connection to database
 func (m *MongoDataBase) Connect() error {
 	if m.mongo == nil {
-		m.config.Load()
 		config := m.config.Get()
 		client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(config.DB.Server))
 		if err != nil {
@@ -44,7 +43,7 @@ func (m *MongoDataBase) Connect() error {
 	return nil
 }
 
-// connect function establish a connection to database
+// Disconnect function closes the connection with database
 func (m *MongoDataBase) Disconnect() error {
 	result := m.mongo.client.Disconnect(context.TODO())
 	m.mongo = nil

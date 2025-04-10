@@ -12,7 +12,7 @@ import (
 func main() {
 	context := context.Background()
 
-	// Runs a Fiber instance as a Parsley-enabled app
+	// Runs a Parsley-enabled app
 	bootstrap.RunParsleyApplication(context, app.NewApp,
 		modules.ConfigureServer,
 		modules.ConfigureControllers,
