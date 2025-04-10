@@ -1,15 +1,33 @@
 package repository
 
-import (
-	"context"
-)
+import "go.mongodb.org/mongo-driver/bson/primitive"
 
 type UserRepository[Model any] interface {
-	FindAll(ctx context.Context) ([]Model, error)
-	FindByName(ctx context.Context, name string) (Model, error)
-	FindByID(ctx context.Context, id string) (Model, error)
-	Insert(ctx context.Context, user Model) (Model, error)
-	DeleteByID(ctx context.Context, id string) error
-	Delete(ctx context.Context, user Model) error
-	Update(ctx context.Context, user Model) error
+	Repository
+	FindAll[Model]
+	FindByName[Model]
+	FindByID[Model]
+	Insert[Model]
+	DeleteByID[Model]
+	Delete[Model]
+	Update[Model]
+}
+
+type UserCacheRepository[Model any] interface {
+	Repository
+	FindByID[Model]
+	Insert[Model]
+	DeleteByID[Model]
+	Delete[Model]
+	Update[Model]
+}
+
+const userPF = "user"
+
+func getUserKey(id string) string {
+	return getKey(userPF, id)
+}
+
+func getUserOIDKey(id primitive.ObjectID) string {
+	return getKey(userPF, id.Hex())
 }

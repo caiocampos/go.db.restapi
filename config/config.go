@@ -6,8 +6,9 @@ type ConfigLoader interface {
 }
 
 type Config struct {
-	App app
-	DB  database `toml:"database"`
+	App   app
+	DB    database `toml:"database"`
+	Cache cache
 }
 
 type app struct {
@@ -18,4 +19,11 @@ type app struct {
 type database struct {
 	Server   string
 	Database string
+}
+
+type cache struct {
+	Server   string
+	Username *string
+	Password *string
+	Type     string
 }
