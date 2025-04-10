@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/github/license/caiocampos/go.db.restapi.svg)](LICENSE)
 
-Servidor go simples com conexão ao MongoDB 
+Servidor go utilizando Fiber e Parsley, com conexão ao MongoDB, e cache com Redis ou Valkey
 
 ## Executando:
 
