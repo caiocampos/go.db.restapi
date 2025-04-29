@@ -9,7 +9,7 @@ require (
 	github.com/bytedance/sonic v1.13.2
 	github.com/gofiber/fiber/v2 v2.52.6
 	github.com/matzefriedrich/parsley v1.0.11
-	github.com/redis/rueidis v1.0.57
+	github.com/redis/rueidis v1.0.59
 	github.com/valkey-io/valkey-go v1.0.59
 	go.mongodb.org/mongo-driver v1.17.3
 )
