@@ -8,7 +8,7 @@ require (
 	github.com/BurntSushi/toml v1.5.0
 	github.com/bytedance/sonic v1.13.2
 	github.com/gofiber/fiber/v2 v2.52.8
-	github.com/matzefriedrich/parsley v1.0.12
+	github.com/matzefriedrich/parsley v1.0.13
 	github.com/redis/rueidis v1.0.60
 	github.com/valkey-io/valkey-go v1.0.60
 	go.mongodb.org/mongo-driver v1.17.3
