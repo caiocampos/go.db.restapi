@@ -10,7 +10,7 @@ require (
 	github.com/gofiber/fiber/v2 v2.52.8
 	github.com/matzefriedrich/parsley v1.1.0
 	github.com/redis/rueidis v1.0.61
-	github.com/valkey-io/valkey-go v1.0.61
+	github.com/valkey-io/valkey-go v1.0.62
 	go.mongodb.org/mongo-driver v1.17.4
 )
 
