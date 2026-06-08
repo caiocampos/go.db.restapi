@@ -3,7 +3,7 @@ module go.db.restapi
 go 1.25.0
 
 require (
-	github.com/BurntSushi/toml v1.5.0
+	github.com/BurntSushi/toml v1.6.0
 	github.com/bytedance/sonic v1.15.2
 	github.com/gofiber/fiber/v2 v2.52.13
 	github.com/matzefriedrich/parsley v1.1.2
