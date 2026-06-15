@@ -32,8 +32,8 @@ github.com/mattn/go-isatty v0.0.20 h1:xfD0iDuEKnDkl03q4limB+vH+GxLEtL/jb4xVJSWWE
 github.com/mattn/go-isatty v0.0.20/go.mod h1:W+V8PltTTMOvKvAeJH7IuucS94S2C6jfK/D7dTCTo3Y=
 github.com/mattn/go-runewidth v0.0.16 h1:E5ScNMtiwvlvB5paMFdw9p4kSQzbXFikJ5SQO6TULQc=
 github.com/mattn/go-runewidth v0.0.16/go.mod h1:Jdepj2loyihRzMpdS35Xk/zdY8IAYHsh153qUoGf23w=
-github.com/matzefriedrich/parsley v1.4.2 h1:h+lDMG49RKB/c6DFzgWzQwUX0hX39DpY0vJqSbCbrF0=
-github.com/matzefriedrich/parsley v1.4.2/go.mod h1:ydBkSjXjJ6Ya+DfSasOZYlEO1vHKX+aiSJu+hS/cd1w=
+github.com/matzefriedrich/parsley v1.5.0 h1:iBTIFuGcOM4YQcxiwBFnU4HEzuV45LSmgw6tMq3w9KY=
+github.com/matzefriedrich/parsley v1.5.0/go.mod h1:DBD0Vsu8yqaDBGqfZVf+10WhFI1/70TZ6URx0CkwTA0=
 github.com/montanaflynn/stats v0.7.1 h1:etflOAAHORrCC44V+aR6Ftzort912ZU+YLiSTuV8eaE=
 github.com/montanaflynn/stats v0.7.1/go.mod h1:etXPPgVO6n31NxCd9KQUMvCM+ve0ruNzt6R8Bnaayow=
 github.com/onsi/gomega v1.39.1 h1:1IJLAad4zjPn2PsnhH70V4DKRFlrCzGBNrNaru+Vf28=
