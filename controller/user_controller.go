@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 
 	"go.db.restapi/model"
 	serv "go.db.restapi/service"
@@ -30,8 +30,8 @@ func (u *UserController) Init(app *fiber.App) {
 	}
 }
 
-func (u *UserController) findAll(c *fiber.Ctx) error {
-	users, err := u.serv.FindAll(c.Context())
+func (u *UserController) findAll(c fiber.Ctx) error {
+	users, err := u.serv.FindAll(c.RequestCtx())
 	if err != nil {
 		return c.Status(400).SendString(err.Error())
 	}
@@ -47,60 +47,62 @@ func (u *UserController) findAll(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(users)
 }
 
-func (u *UserController) findByName(c *fiber.Ctx) error {
-	user, err := u.serv.FindByName(c.Context(), c.Params("name"))
+func (u *UserController) findByName(c fiber.Ctx) error {
+	user, err := u.serv.FindByName(c.RequestCtx(), c.Params("name"))
 	if err != nil {
 		return c.Status(400).SendString("Name not found")
 	}
 	return c.Status(fiber.StatusOK).JSON(user.GetWithoutPass())
 }
 
-func (u *UserController) findByID(c *fiber.Ctx) error {
-	user, err := u.serv.FindByID(c.Context(), c.Params("id"))
+func (u *UserController) findByID(c fiber.Ctx) error {
+	user, err := u.serv.FindByID(c.RequestCtx(), c.Params("id"))
 	if err != nil {
 		return c.Status(400).SendString("ID not found")
 	}
 	return c.Status(fiber.StatusOK).JSON(user.GetWithoutPass())
 }
 
-func (u *UserController) insert(c *fiber.Ctx) error {
+func (u *UserController) insert(c fiber.Ctx) error {
 	user := model.User{}
-	if err := c.BodyParser(user); err != nil {
+	if err := c.Bind().Body(user); err != nil {
 		return c.Status(400).SendString("Invalid request")
 	}
-	userResult, err := u.serv.Insert(c.Context(), user)
+	userResult, err := u.serv.Insert(c.RequestCtx(), user)
 	if err != nil {
 		return c.Status(400).SendString(err.Error())
 	}
 	return c.Status(fiber.StatusCreated).JSON(userResult.GetWithoutPass())
 }
 
-func (u *UserController) delete(c *fiber.Ctx) error {
+func (u *UserController) delete(c fiber.Ctx) error {
 	user := model.User{}
-	if err := c.BodyParser(user); err != nil {
+	if err := c.Bind().Body(user); err != nil {
 		return c.Status(400).SendString("Invalid request")
 	}
-	if err := u.serv.Delete(c.Context(), user); err != nil {
+	if err := u.serv.Delete(c.RequestCtx(), user); err != nil {
 		return c.Status(400).SendString(err.Error())
 	}
 	return c.SendStatus(fiber.StatusNoContent)
 }
 
-func (u *UserController) deleteByID(c *fiber.Ctx) error {
-	err := u.serv.DeleteByID(c.Context(), c.Params("id"))
+func (u *UserController) deleteByID(c fiber.Ctx) error {
+	err := u.serv.DeleteByID(c.RequestCtx(), c.Params("id"))
 	if err != nil {
 		return c.Status(400).SendString("ID not found")
 	}
 	return c.SendStatus(fiber.StatusNoContent)
 }
 
-func (u *UserController) update(c *fiber.Ctx) error {
+func (u *UserController) update(c fiber.Ctx) error {
 	user := model.User{}
-	if err := c.BodyParser(user); err != nil {
+	if err := c.Bind().Body(user); err != nil {
 		return c.Status(400).SendString("Invalid request")
 	}
-	if err := u.serv.Update(c.Context(), user); err != nil {
+	if err := u.serv.Update(c.RequestCtx(), user); err != nil {
 		return c.Status(400).SendString(err.Error())
 	}
 	return c.SendStatus(fiber.StatusOK)
 }
+
+// fiber:context-methods migrated

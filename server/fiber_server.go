@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/bytedance/sonic"
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 
 	"go.db.restapi/config"
 	ctrl "go.db.restapi/controller"
