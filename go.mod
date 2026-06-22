@@ -7,7 +7,7 @@ require (
 	github.com/bytedance/sonic v1.15.2
 	github.com/gofiber/fiber/v3 v3.3.0
 	github.com/matzefriedrich/parsley v1.5.0
-	github.com/redis/rueidis v1.0.75
+	github.com/redis/rueidis v1.0.76
 	github.com/valkey-io/valkey-go v1.0.76
 	go.mongodb.org/mongo-driver v1.17.9
 )
