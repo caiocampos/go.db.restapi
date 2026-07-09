@@ -12,7 +12,11 @@ http://www.golangbr.org/doc/instalacao
 
 Antes de executar modifique o arquivo config.toml para apontar para o MongoDB instalado.
 
-Após instalar o Go e configurar o arquivo config.toml compile o código, utilize o seguinte comando para isso:
+Após instalar o Go e configurar o arquivo config.toml, instale as dependências com o seguinte comando:
+
+> go mod tidy
+
+Então compile o código, utilize o seguinte comando para isso:
 
 > go build cmd/main.go
 
