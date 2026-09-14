@@ -4,7 +4,7 @@ go 1.26.5
 
 require (
 	github.com/BurntSushi/toml v1.6.0
-	github.com/bytedance/sonic v1.15.3
+	github.com/bytedance/sonic v1.15.4
 	github.com/gofiber/fiber/v3 v3.5.0
 	github.com/matzefriedrich/parsley v1.7.0
 	github.com/redis/rueidis v1.0.77
