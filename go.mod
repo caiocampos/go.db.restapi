@@ -9,7 +9,7 @@ require (
 	github.com/matzefriedrich/parsley v1.7.0
 	github.com/redis/rueidis v1.0.77
 	github.com/valkey-io/valkey-go v1.0.77
-	go.mongodb.org/mongo-driver v1.17.9
+	go.mongodb.org/mongo-driver v1.17.10
 )
 
 require (
