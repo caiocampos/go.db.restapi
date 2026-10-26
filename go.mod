@@ -1,12 +1,12 @@
 module go.db.restapi
 
-go 1.26.5
+go 1.27
 
 require (
 	github.com/BurntSushi/toml v1.6.0
 	github.com/bytedance/sonic v1.15.4
 	github.com/gofiber/fiber/v3 v3.6.1
-	github.com/matzefriedrich/parsley v1.7.0
+	github.com/matzefriedrich/parsley v1.7.2
 	github.com/redis/rueidis v1.0.79
 	github.com/valkey-io/valkey-go v1.0.79
 	go.mongodb.org/mongo-driver v1.17.10
