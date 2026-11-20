@@ -8,7 +8,7 @@ require (
 	github.com/gofiber/fiber/v3 v3.7.0
 	github.com/matzefriedrich/parsley v1.7.2
 	github.com/redis/rueidis v1.0.79
-	github.com/valkey-io/valkey-go v1.0.79
+	github.com/valkey-io/valkey-go v1.0.80
 	go.mongodb.org/mongo-driver v1.17.10
 )
 
@@ -38,7 +38,7 @@ require (
 	golang.org/x/arch v0.0.0-20210923205945-b76863e36670 // indirect
 	golang.org/x/crypto v0.58.0 // indirect
 	golang.org/x/net v0.62.0 // indirect
-	golang.org/x/sync v0.24.0 // indirect
-	golang.org/x/sys v0.49.0 // indirect
-	golang.org/x/text v0.43.0 // indirect
+	golang.org/x/sync v0.25.0 // indirect
+	golang.org/x/sys v0.50.0 // indirect
+	golang.org/x/text v0.44.0 // indirect
 )
